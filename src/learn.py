@@ -29,16 +29,6 @@ print(freqmotspos['la'])
 print(freqposmots['VERB'])
 
 
-def tag(corpus):
-	for token in corpus.split(' '):
-		freqs = freqmotspos[token]
-		if freqs:
-			pos = max(freqs, key=freqs.get)
-			print(token + '/' + pos, end=' ')
-		else:
-			pos = max(freqpos, key=freqpos.get)	
-			print("pas dans le dic: " + token + '/' + pos, end=' ')
-
 json_obj = json.dumps(freqmots, indent=3)
 with open("freqmots.json", 'w') as f:
 	f.write(json_obj)
@@ -54,5 +44,16 @@ with open("freqmotspos.json", 'w') as f:
 json_obj = json.dumps(freqposmots, indent=3)
 with open("freqposmots.json", 'w') as f:
 	f.write(json_obj)
+
+# Test maj
+def tag(corpus):
+	for token in corpus.split(' '):
+		freqs = freqmotspos[token]
+		if freqs:
+			pos = max(freqs, key=freqs.get)
+			print(token + '/' + pos, end=' ')
+		else:
+			pos = max(freqpos, key=freqpos.get)	
+			print("pas dans le dic: " + token + '/' + pos, end=' ')
 
 tag("Je ne veux pas me lever .")
