@@ -26,6 +26,7 @@ with open("freqbigramspos.json", 'r') as f:
 def majoritaire(corpus):
 	res = ""
 	for token in corpus.split(' '):
+		token = token.strip()
 		if token in freqmotspos:
 			freqs = freqmotspos[token]
 			#if freqs:
@@ -40,6 +41,7 @@ def bigrams(corpus):
 	res = ""
 	prevtok = '_'
 	for token in corpus.split(' '):
+		token = token.strip()
 		bigram = prevtok + '-' + token
 		if bigram in freqbigramspos:
 			#motsposmax = max(freqbigramspos[bigram].items(), key = labmbda i:i[1])
