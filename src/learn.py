@@ -10,9 +10,10 @@ def learn_from(document):
 	freqpos = defaultdict(int)
 	freqmotspos = defaultdict(lambda: defaultdict(int))
 	freqposmots = defaultdict(lambda: defaultdict(int))
-
+	freqbigramspos = defaultdict(lambda: defaultdict(lambda: defaultdict(int))) 
 	for line in open(document, 'r'):
 		tokspos = line.split(' ')
+		prevtoken = '_'
 		for tokpos in tokspos:
 			tokposlst = tokpos.split('/')
 			if len(tokposlst) == 2:
@@ -22,6 +23,8 @@ def learn_from(document):
 				freqpos[pos] += 1
 				freqmotspos[token][pos] += 1
 				freqposmots[pos][token] += 1
+				freqbigramspos[prevtoken][token][pos] += 1
+				prevtoken = token
 
 	"""
 	print(freqmots)
@@ -45,6 +48,10 @@ def learn_from(document):
 		
 	json_obj = json.dumps(freqposmots, indent=3)
 	with open("freqposmots.json", 'w') as f:
+		f.write(json_obj)
+
+	json_obj = json.dumps(freqbigramspos, indent=3)
+	with open("freqbigramspos.json", 'w') as f:
 		f.write(json_obj)
 
 	# Test maj
