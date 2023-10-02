@@ -10,7 +10,7 @@ def learn_from(document):
 	freqpos = defaultdict(int)
 	freqmotspos = defaultdict(lambda: defaultdict(int))
 	freqposmots = defaultdict(lambda: defaultdict(int))
-	freqbigramspos = defaultdict(lambda: defaultdict(lambda: defaultdict(int))) 
+	freqbigramspos = defaultdict(lambda: defaultdict(int))
 	for line in open(document, 'r'):
 		tokspos = line.split(' ')
 		prevtoken = '_'
@@ -23,7 +23,7 @@ def learn_from(document):
 				freqpos[pos] += 1
 				freqmotspos[token][pos] += 1
 				freqposmots[pos][token] += 1
-				freqbigramspos[prevtoken][token][pos] += 1
+				freqbigramspos[prevtoken+'-'+token][pos] += 1
 				prevtoken = token
 
 	"""

@@ -19,21 +19,50 @@ with open("freqposmots.json", 'r') as f:
 with open("freqmotspos.json", 'r') as f:
 	string = f.read()
 	freqmotspos = json.loads(string)
+with open("freqbigramspos.json", 'r') as f:
+	string = f.read()
+	freqbigramspos = json.loads(string)
 
 def majoritaire(corpus):
+	res = ""
 	for token in corpus.split(' '):
 		if token in freqmotspos:
 			freqs = freqmotspos[token]
 			#if freqs:
 			pos = max(freqs, key=freqs.get)
-			print(token + '/' + pos, end=' ')
+			res += token + '/' + pos + ' '
 		else:
 			pos = max(freqpos, key=freqpos.get)	
-			print(token + '/' + pos, end=' ')
+			res += token + '/' + pos + ' '
+	return res
+
+def bigrams(corpus):
+	res = ""
+	prevtok = '_'
+	for token in corpus.split(' '):
+		bigram = prevtok + '-' + token
+		if bigram in freqbigramspos:
+			#motsposmax = max(freqbigramspos[bigram].items(), key = labmbda i:i[1])
+			#res += token + '/' + motsposmax[0] + ' '
+			freqs = freqbigramspos[bigram]
+			pos = max(freqs, key=freqs.get)
+			res += token + '/' + pos + ' '
+		elif token in freqmotspos:
+			#motsposmax = max(freqmotspos[token].items(), key = lambda i:i[1])
+			#res += token + '/' + motsposmax[0]
+			freqs = freqmotspos[token]
+			pos = max(freqs, key=freqs.get)
+			res += token + '/' + pos + ' '
+		else:
+			pos = max(freqpos, key=freqpos.get)	
+			res += token + '/' + pos + ' '
+	return res
 
 def main(corpus, method):
 	if method == 'majoritaire':
-		majoritaire(corpus)
+		print(majoritaire(corpus))
+	elif method == 'bigrams':
+		print(bigrams(corpus))
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='Tags a corpus already tokenized on spaces.')
