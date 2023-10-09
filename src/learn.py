@@ -11,11 +11,14 @@ def learn_from(document):
 	freqmotspos = defaultdict(lambda: defaultdict(int))
 	freqposmots = defaultdict(lambda: defaultdict(int))
 	freqbigramspos = defaultdict(lambda: defaultdict(int))
+	freqposposmot = defaultdict(lambda: defaultdict(int))
+	freqpospos = defaultdict(lambda: defaultdict(int))
 	for line in open(document, 'r'):
 		tokspos = line.split(' ')
 		prevtoken = '_'
+		prevpos = '_'
 		for tokpos in tokspos:
-			tokposlst = tokpos.split('/')
+			tokposlst = tokpos.rsplit('/') # split on last occurrence
 			if len(tokposlst) == 2:
 				token, pos = tokposlst
 				# print(token, pos)
@@ -24,14 +27,17 @@ def learn_from(document):
 				freqmotspos[token][pos] += 1
 				freqposmots[pos][token] += 1
 				freqbigramspos[prevtoken+'-'+token][pos] += 1
+				freqposposmot[prevpos+'-'+pos][token] += 1 #HMM
+				freqpospos[prevpos][pos] += 1 #HMM
 				prevtoken = token
+				prevpos = pos
 
 	"""
 	print(freqmots)
 	print(freqmotspos)
 	print(freqmotspos['la'])
-	"""
 	print(freqposmots['VERB'])
+	"""
 
 
 	json_obj = json.dumps(freqmots, indent=3)
@@ -52,6 +58,14 @@ def learn_from(document):
 
 	json_obj = json.dumps(freqbigramspos, indent=3)
 	with open("freqbigramspos.json", 'w') as f:
+		f.write(json_obj)
+
+	json_obj = json.dumps(freqposposmot, indent=3)
+	with open("freqposposmot.json", "w") as f:
+		f.write(json_obj)
+
+	json_obj = json.dumps(freqpospos, indent=3)
+	with open("freqpospos.json", "w") as f:
 		f.write(json_obj)
 
 	# Test maj
