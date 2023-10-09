@@ -39,8 +39,9 @@ print(df_pos)
 
 #Matrice de génératins p_gen
 p_gen = df_toks_pos / df_pos
+print("P GEN:::::::")
 print(p_gen)
-#print(p_gen['DET'])
+print(p_gen['DET'])
 
 with open("../freqpospos.json", 'r') as f:
 	string = f.read()
@@ -52,8 +53,26 @@ df_pos_pos = df_pos_pos.fillna(0)
 df_pos_pos = df_pos_pos.T
 
 print(df_pos_pos)
-df_pos2 = df_pos_pos.sum()
-p_trans = df_pos_pos / df_pos2
+p_trans = df_pos_pos / df_pos_pos.sum()
+
 print(p_trans)
 
 
+
+# quelle est la probabilité de cette phrase si on a les POS suivants ?
+phrase = "Le président gagne ."
+pos = "DET NOUN VERB PUNCT"
+
+tok_lst = phrase.split(' ')
+pos_lst = pos.split(' ')
+prevpos = '_'
+proba_sent = 1
+for tok, pos in zip (tok_lst, pos_lst):
+	print(tok, pos)	
+	print(p_gen)
+	p_gen_ = p_gen[pos][tok]
+	p_trans_ = p_trans[pos][prevpos]#[prevpos][pos]
+	proba_sent *= p_gen_ * p_trans_
+	prevpos = pos
+
+print("proba sent:", proba_sent)
