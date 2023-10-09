@@ -4,10 +4,8 @@ import pos_tagging as pt
 
 def evaluation(predictions, labels):
 	predlabels = list(zip(predictions.strip().split(' '), labels.strip().split(' ')))
-	print(predlabels)
 	errors = 0
 	correct = 0
-	#print(predlabels)
 	for predlabel in predlabels:
 		pred, label = predlabel[0].strip().split('/'), predlabel[1].strip().split('/')
 		if pred[0] != label[0]:
@@ -24,10 +22,7 @@ def evaluation(predictions, labels):
 
 def evaluate(labels):
 	sents = ' '.join([l.split('/')[0] for l in labels.split(' ')])
-	print(sents)
-	print(sents.split(' ')[0])
 	predictions = pt.bigrams(sents)
-	print(predictions[0])
 	evaluation(predictions, labels)
 
 """
