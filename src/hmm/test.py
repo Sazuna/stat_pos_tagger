@@ -13,7 +13,7 @@ df_toks_pos = pandas.DataFrame.from_dict(freqmotspos)
 
 
 df_toks_pos = df_toks_pos.fillna(0) # transforme tous les NaN en 0.
-#df_toks_pos += 1 # rajoute 1 partout où ce n'est pas NaN.
+df_toks_pos += 1 # rajoute 1 partout où ce n'est pas NaN afin de n'avoir jamais une probabilité nulle.
 
 df_toks_pos = df_toks_pos.T
 df_pos = df_toks_pos.sum()
@@ -28,7 +28,7 @@ with open("../freqpospos.json", 'r') as f:
 df_pos_pos = pandas.DataFrame.from_dict(freqpospos)
 
 df_pos_pos = df_pos_pos.fillna(0)
-df_pos_pos = df_pos_pos
+df_pos_pos += 1
 
 p_trans = df_pos_pos / df_pos_pos.sum()
 
@@ -41,7 +41,10 @@ pos_lst = pos.split(' ')
 prevpos = '_'
 proba_sent = 1
 for tok, pos in zip (tok_lst, pos_lst):
-	p_gen_ = p_gen[pos][tok]
+	if tok in p_gen[pos].keys():
+		p_gen_ = p_gen[pos][tok]
+	else:
+		p_gen_ = 1/16 #### un chiffre au hasard pour l'instant
 	p_trans_ = p_trans[prevpos][pos]#[prevpos][pos]
 	proba_sent *= p_gen_ * p_trans_
 	print(p_gen_, p_trans_, proba_sent)
